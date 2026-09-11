@@ -1,36 +1,20 @@
 # Launch Night
 
-A new online game has launched and thousands of players are trying to connect. The game uses several services, including a login service, a realm server and an Auction House.
+A new online game has launched and thousands of players are trying to connect. It uses several services, including a login service, a realm server and an Auction House.
 
-In this activity, you will make some small changes to a working Python program. You will use Git to record those changes and push them to your own GitHub repository.
+In this activity, you’ll make a few small changes to a working Python program. You’ll run and test each change before using Git to record your work and push it to GitHub.
 
-You do not need to complete the whole activity at once. Work through each stage in order and check that it works before moving on.
+If you haven’t forked and cloned the practical repository yet, complete the **Getting Started with GitHub and Visual Studio Code** page on Canvas first.
 
-## Stage 1: Get Your Copy of the Project
+## Stage 1: Run the Program
 
-Open the **Getting Started with GitHub** page on Canvas and follow it to:
+Open:
 
-1. Sign in to GitHub.
-2. Fork this repository.
-3. Check that the fork belongs to your account.
-4. Clone your fork to the computer.
-5. Open the cloned project.
-
-Do not make changes until you have cloned **your fork**.
-
-## Stage 2: Run the Starter Program
-
-Open a terminal in the project folder and run:
-
-```bash
-python launch_night.py
+```text
+launch_night.py
 ```
 
-If `python` is not recognised, try:
-
-```bash
-py launch_night.py
-```
+Select the **Run Python File** button in the top-right corner of Visual Studio Code.
 
 You should see:
 
@@ -44,19 +28,23 @@ Auction House: offline
 Offline services: 0
 ```
 
-The program runs, but the final count is incorrect. There is one offline service, not zero. You will fix that later.
+The program works, but the final count is wrong. There is one offline service, not zero. You’ll fix that shortly.
 
-If the program does not run, stop here and check:
+If the Run button is missing, install the **Python** extension published by Microsoft. Visual Studio Code may suggest this automatically in the bottom-right corner.
 
-- the terminal is open in the cloned repository folder;
-- the folder contains `launch_night.py`; and
-- the command has been typed correctly.
+## Stage 2: Look at the Service Data
 
-## Stage 3: Look at the Service Data
+Find `game_services` near the top of `launch_night.py`:
 
-Open `launch_night.py` and find `game_services` near the top.
+```python
+game_services = [
+    {"name": "Login Service", "status": "online"},
+    {"name": "Realm Server", "status": "online"},
+    {"name": "Auction House", "status": "offline"}
+]
+```
 
-The variable contains a **list**. Each item inside the list is a **dictionary** describing one game service.
+`game_services` is a list containing three dictionaries. Each dictionary describes one game service.
 
 For example:
 
@@ -64,56 +52,82 @@ For example:
 {"name": "Login Service", "status": "online"}
 ```
 
-This dictionary has two keys:
+This dictionary contains two key-value pairs:
 
-- `name` stores the name of the service;
-- `status` stores its current status.
+- `name` has the value `"Login Service"`.
+- `status` has the value `"online"`.
 
-## Stage 4: Add a New Service
+Each service uses the same two keys but stores different values.
 
-Add the following dictionary beneath the Auction House entry:
+## Stage 3: Add Another Service
+
+Add this dictionary underneath the Auction House:
 
 ```python
 {"name": "In-game Mail", "status": "online"}
 ```
 
-Remember to add a comma after the previous dictionary. The finished list should contain four services.
+Remember to add a comma after the Auction House dictionary.
 
-Run the program again. You should now see:
+Your finished list should look like this:
+
+```python
+game_services = [
+    {"name": "Login Service", "status": "online"},
+    {"name": "Realm Server", "status": "online"},
+    {"name": "Auction House", "status": "offline"},
+    {"name": "In-game Mail", "status": "online"}
+]
+```
+
+Save the file and run it again using the **Run Python File** button.
+
+You should now see:
 
 ```text
 In-game Mail: online
 ```
 
-If you receive a syntax error, check the commas, quotation marks and brackets in the list.
+If you get a syntax error, check your commas, quotation marks and brackets.
 
-## Stage 5: Make Your First Commit
+## Stage 4: Make Your First Commit
 
-You have completed a meaningful change, so record it using Git.
+You’ve made and tested a useful change, so it’s time to commit it.
 
-Run each command separately:
+Open **Terminal → New Terminal** and run:
 
 ```bash
 git status
 ```
 
-`launch_night.py` should appear as a changed file.
+You should see that `launch_night.py` has changed.
+
+Now run:
 
 ```bash
-git add launch_night.py
+git add .
 git commit -m "Add in-game mail service"
 git push
 ```
 
-Return to your repository on GitHub and refresh the page. Open `launch_night.py` and check that the new service appears there.
+If Git asks you to configure `user.name` and `user.email`, return to the Getting Started page on Canvas.
 
-If the service appears on GitHub, you have successfully completed the full Git workflow.
+Visual Studio Code may open GitHub in your browser and ask you to sign in. Use the account that owns your fork.
 
-## Stage 6: Fix the Offline Count
+Once the push has finished, refresh your fork on GitHub and check that the new service appears in `launch_night.py`.
 
-Find the `count_offline_services()` function. It currently returns `0` without checking the services.
+## Stage 5: Fix the Offline Count
 
-Replace the `TODO` section with this code:
+Find this function:
+
+```python
+def count_offline无需_services(services):
+    """Count and return the number of offline services."""
+    # TODO: Replace the line below by following Stage 5 in README.md.
+    return 0
+```
+
+Remove the `return 0` line and replace it with:
 
 ```python
 offline_count = 0
@@ -125,72 +139,101 @@ for service in services:
 return offline_count
 ```
 
-This code:
+The complete function should now look like this:
 
-1. Starts the count at zero.
-2. Loops through every service.
-3. Checks whether its status is `offline`.
-4. Adds one to the count when an offline service is found.
-5. Returns the final count.
+```python
+def count_offline_services(services):
+    """Count and return the number of offline services."""
+    offline_count = 0
 
-Run the program again. The final line should now be:
+    for service in services:
+        if service["status"] == "offline":
+            offline_count += 1
+
+    return offline_count
+```
+
+This loops through the services and adds one to the count whenever it finds an offline service.
+
+Save the file and run it again.
+
+The final line should now be:
 
 ```text
 Offline services: 1
 ```
 
-## Stage 7: Test Your Program
+## Stage 6: Test It
 
-Change the Realm Server status from `online` to `offline` and run the program again.
+Change the Realm Server status from `online` to `offline`.
 
-Before running it, predict what the offline count should be.
+Before running the program, work out what the new offline count should be.
 
-If the function is working, the final count should now be `2`.
+Run the program. The final count should now be:
 
-Return the Realm Server to `online` after completing the test.
+```text
+Offline services: 2
+```
 
-## Stage 8: Commit and Push the Completed Program
+Change the Realm Server back to `online` and run the program once more.
+
+The final count should return to:
+
+```text
+Offline services: 1
+```
+
+## Stage 7: Commit the Fix
 
 Run:
 
 ```bash
 git status
-git add launch_night.py
+git add .
 git commit -m "Count offline game services"
 git push
 ```
 
-Refresh your repository on GitHub and check that both commits and the completed code are visible.
+Refresh your fork on GitHub and check that both commits are visible.
 
-## Final Check
+## Stage 8: Why Is Git Distributed?
 
-Before finishing, make sure that:
-
-- the program displays four services;
-- the Auction House is offline;
-- the final offline count is `1`;
-- your GitHub repository contains your changes; and
-- you have made at least two commits.
-
-## Short Question
-
-Open `README.md` and replace the line below with one or two sentences explaining why Git is considered distributed.
+Open this `README.md` file and replace the line below with one or two sentences explaining why Git is described as distributed.
 
 ### Why is Git distributed?
 
 Write your answer here.
 
-Commit and push your answer when it is complete.
+Save the README, then run:
+
+```bash
+git status
+git add .
+git commit -m "Explain why Git is distributed"
+git push
+```
+
+## Final Check
+
+Before finishing, make sure that:
+
+- Four services are displayed.
+- The Auction House is offline.
+- The Realm Server is online.
+- The final offline count is `1`.
+- You’ve answered the short Git question.
+- Your changes are visible on GitHub.
+- You’ve made at least three commits.
 
 ## Optional Extension
 
-Only move on to this section once the core activity is complete.
+Once everything above works, update `display_services()` so that it shows a warning underneath any offline service.
 
-Update `display_services()` so that it displays a warning beneath any offline service. For example:
+For example:
 
 ```text
 Auction House: offline
   WARNING: This service is unavailable
 ```
 
-Test the program with different service statuses and commit the extension separately.
+Test it using different service statuses and commit the extension separately.
